@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592389553459",
+    "project_id": "compose-login-test",
+    "storage_bucket": "compose-login-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592389553459:android:5b4da9499a354541731246",
+        "android_client_info": {
+          "package_name": "com.example.login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWmqkWu7RkcxhsOgnQUZ7VBD4dqMILDnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
