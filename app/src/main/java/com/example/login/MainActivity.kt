@@ -6,6 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.login.navigation.NavigationWrapper
 import com.example.login.ui.theme.RetoLoginTheme
@@ -17,8 +21,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            RetoLoginTheme {
-                NavigationWrapper()
+            var isDarkTheme by rememberSaveable { mutableStateOf(false) }
+            RetoLoginTheme(darkTheme = isDarkTheme) {
+                NavigationWrapper(onToggleTheme = { isDarkTheme = !isDarkTheme })
             }
         }
     }
@@ -28,7 +33,8 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMain() {
-    RetoLoginTheme {
-        NavigationWrapper()
+    var isDarkTheme by rememberSaveable { mutableStateOf(false) }
+    RetoLoginTheme(darkTheme = isDarkTheme) {
+        NavigationWrapper(onToggleTheme = { isDarkTheme = !isDarkTheme })
     }
 }

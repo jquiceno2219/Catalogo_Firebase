@@ -9,7 +9,7 @@ import com.example.login.HomeScreen
 import com.example.login.LoginScreen
 
 @Composable
-fun NavigationWrapper() {
+fun NavigationWrapper(onToggleTheme: () -> Unit) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Login) {
 
@@ -21,7 +21,7 @@ fun NavigationWrapper() {
 
         composable<Home> { backStackEntry ->
             val home = backStackEntry.toRoute<Home>()
-            HomeScreen(userEmail = home.userEmail) {
+            HomeScreen(userEmail = home.userEmail, onToggleTheme = onToggleTheme) {
                 navController.navigate(Login) {
                     popUpTo(Login) { inclusive = true }
                 }

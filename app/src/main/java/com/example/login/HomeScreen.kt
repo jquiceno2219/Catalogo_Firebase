@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +19,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun HomeScreen(userEmail: String, onLogout: () -> Unit) {
+fun HomeScreen(userEmail: String, onToggleTheme: () -> Unit, onLogout: () -> Unit) {
     val productsState = remember { mutableStateOf<List<Product>>(emptyList()) }
 
     LaunchedEffect(Unit) {
@@ -34,13 +36,25 @@ fun HomeScreen(userEmail: String, onLogout: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
+
+                // Botón de modo oscuro arriba
+                IconButton(onClick = onToggleTheme) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = "Cambiar tema"
+                    )
+                }
+
+                // Texto de bienvenida
                 Text(
-                    text = "Bienvenido, $userEmail!",
-                    style = MaterialTheme.typography.headlineSmall
+                    text = "Bienvenido, ${userEmail ?: "Usuario"}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+
+                // Botón de cerrar sesión abajo
                 Button(onClick = onLogout) {
                     Text("Cerrar sesión")
                 }
