@@ -14,32 +14,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun HomeScreen(userEmail: String, onLogout: () -> Unit) {
+    val productsState = remember { mutableStateOf<List<Product>>(emptyList()) }
 
-    val products = remember {
-        listOf(
-            Product(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeIIwUNZqUzdbgQaN6VFbXmEjVI0AD8n98NFAKjK1Q76p0v29F16i6RUradhaH88cv2ZEUvZJ_YQDhUCiLnpxxMqZKWHdPCArM_PTMx8AB&s=10",
-                name = "Producto 1",
-                price = "$10.00",
-                description = "Esta es una descripción corta del producto 1."
-            ),
-            Product(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeIIwUNZqUzdbgQaN6VFbXmEjVI0AD8n98NFAKjK1Q76p0v29F16i6RUradhaH88cv2ZEUvZJ_YQDhUCiLnpxxMqZKWHdPCArM_PTMx8AB&s=10",
-                name = "Producto 2",
-                price = "$20.00",
-                description = "Esta es una descripción corta del producto 2."
-            ),
-            Product(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeIIwUNZqUzdbgQaN6VFbXmEjVI0AD8n98NFAKjK1Q76p0v29F16i6RUradhaH88cv2ZEUvZJ_YQDhUCiLnpxxMqZKWHdPCArM_PTMx8AB&s=10",
-                name = "Producto 3",
-                price = "$30.00",
-                description = "Esta es una descripción corta del producto 3."
-            )
-        )
+    LaunchedEffect(Unit) {
+        loadProductsFromFirebase { list ->
+            productsState.value = list
+        }
     }
+
+    val products = productsState.value
 
     Scaffold(
         topBar = {
@@ -71,6 +58,23 @@ fun HomeScreen(userEmail: String, onLogout: () -> Unit) {
         }
     }
 }
+
+fun loadProductsFromFirebase(onResult: (List<Product>) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+
+    db.collection("products")
+        .get()
+        .addOnSuccessListener { result ->
+            val list = result.documents.mapNotNull { doc ->
+                doc.toObject(Product::class.java)
+            }
+            onResult(list)
+        }
+        .addOnFailureListener {
+            onResult(emptyList())
+        }
+}
+
 
 @Composable
 fun ProductItem(product: Product) {
